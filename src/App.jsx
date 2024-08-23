@@ -54,6 +54,7 @@ function App() {
     const index = todos.findIndex((todo) => todo.id == newTodo.id)
     let newTodos = [...todos]
     newTodos[index] = newTodo
+    newTodos[index].order = index //prevent resetting to old order on edit
     setTodos(newTodos)
   }
 
@@ -79,7 +80,7 @@ function App() {
         <Spacer y={2} />
         <h2 className='font-bold text-2xl'>Aufgaben</h2>
         <Reorder.Group axis="y" onReorder={handleReorder} values={todos}>
-          {todos.map((todo) => (
+          {todos.sort((a, b) => a.order>b.order).map((todo) => (
             <Reorder.Item 
               value={todo} 
               key={todo.id} 
