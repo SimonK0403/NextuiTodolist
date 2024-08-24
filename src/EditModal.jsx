@@ -1,9 +1,14 @@
-import { Input, Textarea, Button, Modal, ModalHeader, ModalBody, ModalFooter, ModalContent, Spacer } from "@nextui-org/react"
-import { useState } from "react"
+import { Input, Textarea, Button, Modal, ModalHeader, ModalBody, ModalFooter, ModalContent, Spacer, Checkbox } from "@nextui-org/react"
+import { useState, useEffect } from "react"
 import { TrashIcon } from "@heroicons/react/24/outline"
 
 function EditModal({ isOpen, setOpen, saveTodo, todo, deleteTodo }) {
   const [editingTodo, setEditingTodo] = useState(todo)
+
+  //To update the todo when it is changed in the parent (completed)
+  useEffect(() => {
+    setEditingTodo(todo)
+  }, [todo])
 
   const handleSaveTodo = () => {
     saveTodo(editingTodo)
@@ -25,6 +30,13 @@ function EditModal({ isOpen, setOpen, saveTodo, todo, deleteTodo }) {
 
   const handleDeleteTodo = () => {
     deleteTodo(editingTodo.id)
+  }
+
+  const handleChangeCompleted = (newCompleted) => {
+    setEditingTodo((oldTodo) => ({
+      ...oldTodo,
+      completed: newCompleted
+    }))
   }
 
   return (
@@ -57,6 +69,12 @@ function EditModal({ isOpen, setOpen, saveTodo, todo, deleteTodo }) {
             placeholder="Beschreibe die Aufgabe"
             onChange={(event) => handleChangeDescription(event.target.value)}
           />
+          <Checkbox
+            isSelected={editingTodo.completed}
+            onChange={(event) => handleChangeCompleted(event.target.checked)}
+          >
+            Abgeschlossen
+          </Checkbox>
         </ModalBody>
         <ModalFooter>
           <Button

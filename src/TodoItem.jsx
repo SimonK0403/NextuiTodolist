@@ -1,9 +1,15 @@
-import { Card, CardBody, CardHeader } from '@nextui-org/react'
-import { useState } from 'react'
+import { Card, CardBody, CardHeader, CardFooter, Checkbox } from '@nextui-org/react'
+import { useState, useEffect } from 'react'
 import EditModal from './EditModal'
+import StrikableText from './components/StrikableText'
 
 function TodoItem({ todo, editTodo, deleteTodo, isDragging }) {
   const [modalOpen, setModalOpen] = useState(false)
+  const [currentTodo, setCurrentTodo] = useState(todo)
+
+  useEffect(() => {
+    editTodo(currentTodo)
+  }, [currentTodo])
 
   const handleEditTodo = () => {
     setModalOpen(true)
@@ -11,7 +17,14 @@ function TodoItem({ todo, editTodo, deleteTodo, isDragging }) {
 
   const saveTodo = (editedTodo) => {
     setModalOpen(false)
-    editTodo(editedTodo)
+    setCurrentTodo(editedTodo)
+  }
+
+  const handleComplete = (newCompleted) => {
+    setCurrentTodo((oldTodo) => ({
+      ...oldTodo, 
+      completed: newCompleted
+    }))
   }
 
   return (
@@ -24,17 +37,30 @@ function TodoItem({ todo, editTodo, deleteTodo, isDragging }) {
         onClick={handleEditTodo}
       >
         <CardHeader className="font-bold">
-          {todo.title}
+          <StrikableText stroked={currentTodo.completed}>
+            {currentTodo.title}
+          </StrikableText>
         </CardHeader>
         <CardBody>
-          {todo.description}
+          <StrikableText stroked={currentTodo.completed}>
+            {currentTodo.description}
+          </StrikableText>
         </CardBody>
+        <CardFooter>
+          <Checkbox
+            isSelected={currentTodo.completed}
+            onChange={(event) => handleComplete(event.target.checked)}
+          >
+            Abgeschlossen
+          </Checkbox>
+        </CardFooter>
       </Card>
       <EditModal
+        key={currentTodo.id}
         isOpen={modalOpen}
         setOpen={setModalOpen}
         saveTodo={saveTodo}
-        todo={todo}
+        todo={currentTodo}
         deleteTodo={deleteTodo}
       />
     </>
