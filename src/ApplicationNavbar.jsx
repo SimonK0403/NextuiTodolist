@@ -1,6 +1,8 @@
 import { Navbar, NavbarContent, NavbarItem, NavbarBrand, Switch } from "@nextui-org/react"
+import { useDarkMode } from "./components/DarkModeProvider"
 
 function ApplicationNavbar() {
+  const [isDarkMode, setIsDarkMode] = useDarkMode()
 
   return (
     <Navbar isBordered>
@@ -9,7 +11,10 @@ function ApplicationNavbar() {
           <p className='font-bold text-3xl'>Todoliste</p>
         </NavbarBrand>
         <NavbarItem>
-          <Switch >
+          <Switch 
+            isSelected={isDarkMode}
+            onValueChange={(value) => setIsDarkMode(value)}
+          >
             Dark Mode
           </Switch>
         </NavbarItem>
