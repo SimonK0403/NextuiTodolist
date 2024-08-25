@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "title": "Erstes Todo",
+    "description": "Beschreibung für erstes Todo",
+    "order": 0,
+    "completed": false
+  },
+  {
+    "id": 2,
+    "title": "Zweites Todo",
+    "description": "Beschreibung für zweites Todo",
+    "order": 1,
+    "completed": false
+  },
+  {
+    "id": 3,
+    "title": "Drittes Todo",
+    "description": "Beschreibung für drittes Todo",
+    "order": 2,
+    "completed": false
+  },
+  {
+    "id": 4,
+    "title": "Viertes Todo",
+    "description": "Beschreibung für viertes Todo",
+    "order": 3,
+    "completed": false
+  }
+]

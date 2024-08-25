@@ -1,37 +1,10 @@
 const express = require("express")
+const cors = require("cors")
+const fs = require("fs")
 
 const app = express()
-
-var todos = [
-  {
-    id: 1,
-    title: "Erstes Todo",
-    description: "Beschreibung für erstes Todo",
-    order: 0,
-    completed: false
-  },
-  {
-    id: 2,
-    title: "Zweites Todo",
-    description: "Beschreibung für zweites Todo",
-    order: 1,
-    completed: false
-  },
-  {
-    id: 3,
-    title: "Drittes Todo",
-    description: "Beschreibung für drittes Todo",
-    order: 2,
-    completed: false
-  },
-  {
-    id: 4,
-    title: "Viertes Todo",
-    description: "Beschreibung für viertes Todo",
-    order: 3,
-    completed: false
-  },
-]
+app.use(cors())
+var todos = []
 
 app.get("/", (req, res) => {
   res.status(200).send("Server running")
@@ -41,6 +14,19 @@ app.get("/todos", (req, res) => {
   res.status(200).json(todos)
 })
 
-app.listen(8080, () => {
+app.delete("/delete/:id", (req, res) => {
+  const id = req.params.id
+  todos = todos.filter((todo) => todo.id != id)
+  todos.forEach((todo, index) => todo.order = index)
+  res.status(200).json(todos)
+})
+
+app.listen(8080, "0.0.0.0", () => {
   console.log("Server started")
+  fs.readFile("data.json", (err, data) => {
+    if (err) {
+      console.error(err)
+    }
+    todos = JSON.parse(data)
+  })
 })
