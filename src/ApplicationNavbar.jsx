@@ -1,5 +1,6 @@
 import { Navbar, NavbarContent, NavbarItem, NavbarBrand, Switch } from "@nextui-org/react"
 import { useDarkMode } from "./components/DarkModeProvider"
+import { SunIcon, MoonIcon } from "@heroicons/react/24/outline"
 
 function ApplicationNavbar() {
   const [isDarkMode, setIsDarkMode] = useDarkMode()
@@ -14,6 +15,14 @@ function ApplicationNavbar() {
           <Switch 
             isSelected={isDarkMode}
             onValueChange={(value) => setIsDarkMode(value)}
+            color="default"
+            thumbIcon={({isSelected, className}) => 
+              isSelected ? (
+                <MoonIcon className={className} />
+              ) : (
+                <SunIcon className={className} />
+              )
+            }
           >
             Dark Mode
           </Switch>
