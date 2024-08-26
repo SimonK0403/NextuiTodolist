@@ -4,13 +4,32 @@ const fs = require("fs")
 
 const app = express()
 app.use(cors())
+app.use(express.json())
 var todos = []
+var newId = 5
 
 app.get("/", (req, res) => {
   res.status(200).send("Server running")
 })
 
 app.get("/todos", (req, res) => {
+  res.status(200).json(todos)
+})
+
+app.post("/addTodo", (req, res) => {
+  var newTodo = req.body
+  newTodo.id = newId
+  newTodo.order = todos.length
+  todos.push(newTodo)
+  newId += 1
+  res.status(200).json(todos)
+})
+
+app.put("/editTodo", (req, res) => {
+  var newTodo = req.body
+  const index = todos.findIndex((todo) => todo.id == newTodo.id)
+  newTodo.order = index //prevent resetting to old order on edit
+  todos[index] = newTodo
   res.status(200).json(todos)
 })
 
