@@ -16,6 +16,10 @@ function App() {
 
   useEffect(() => {
     fetchData("/todos").then((todos) => setTodos(todos))
+    // const interval = setInterval(() => {
+    //   fetchData("/todos").then((todos) => setTodos(todos))
+    // }, 5000)
+    // return () => clearInterval(interval)
   }, [])
 
   const addTodo = (newTodo) => {
@@ -31,11 +35,7 @@ function App() {
   }
 
   const handleReorder = (reorderedTodos) => {
-    const updatedTodos = reorderedTodos.map((todo, index) => ({
-      ...todo,
-      order: index
-    }))
-    setTodos(updatedTodos)
+    fetchData("/reorderTodos", "PUT", reorderedTodos).then((updatedTodos) => setTodos(updatedTodos))
   }
 
   return (

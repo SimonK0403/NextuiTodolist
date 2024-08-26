@@ -7,6 +7,10 @@ function TodoItem({ todo, editTodo, deleteTodo, isDragging }) {
   const [modalOpen, setModalOpen] = useState(false)
   const [currentTodo, setCurrentTodo] = useState(todo)
 
+  // useEffect(() => { //Update the Items
+  //   setCurrentTodo(todo)
+  // }, [todo])
+
   const handleEditTodo = () => {
     setModalOpen(true)
   }

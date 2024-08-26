@@ -40,6 +40,15 @@ app.delete("/delete/:id", (req, res) => {
   res.status(200).json(todos)
 })
 
+app.put("/reorderTodos", (req, res) => {
+  const reorderedTodos = req.body.map((todo, index) => ({
+    ...todo,
+    order: index
+  }))
+  todos = reorderedTodos
+  res.status(200).json(todos)
+})
+
 app.listen(8080, "0.0.0.0", () => {
   console.log("Server started")
   fs.readFile("data.json", (err, data) => {
