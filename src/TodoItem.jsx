@@ -7,9 +7,9 @@ function TodoItem({ todo, editTodo, deleteTodo, isDragging }) {
   const [modalOpen, setModalOpen] = useState(false)
   const [currentTodo, setCurrentTodo] = useState(todo)
 
-  useEffect(() => {
-    editTodo(currentTodo)
-  }, [currentTodo])
+  // useEffect(() => { //Update the Items
+  //   setCurrentTodo(todo)
+  // }, [todo])
 
   const handleEditTodo = () => {
     setModalOpen(true)
@@ -18,6 +18,7 @@ function TodoItem({ todo, editTodo, deleteTodo, isDragging }) {
   const saveTodo = (editedTodo) => {
     setModalOpen(false)
     setCurrentTodo(editedTodo)
+    editTodo(editedTodo)
   }
 
   const handleComplete = (newCompleted) => {
@@ -25,6 +26,7 @@ function TodoItem({ todo, editTodo, deleteTodo, isDragging }) {
       ...oldTodo, 
       completed: newCompleted
     }))
+    editTodo({...currentTodo, completed: newCompleted})
   }
 
   return (

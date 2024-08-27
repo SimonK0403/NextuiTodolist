@@ -7,6 +7,9 @@ function EditModal({ isOpen, setOpen, saveTodo, todo, deleteTodo }) {
 
   //To update the todo when it is changed in the parent (completed)
   useEffect(() => {
+    // if(!isOpen) { //Dont refresh (with old data) when modal is open
+    //   setEditingTodo(todo)
+    // }
     setEditingTodo(todo)
   }, [todo])
 
