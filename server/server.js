@@ -6,8 +6,8 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 var todos = []
-var newId = 5
 
+//Endpoints
 app.get("/", (req, res) => {
   res.status(200).send("Server running")
 })
@@ -18,10 +18,10 @@ app.get("/todos", (req, res) => {
 
 app.post("/addTodo", (req, res) => {
   var newTodo = req.body
-  newTodo.id = newId
+  newTodo.id = findFreeId()
   newTodo.order = todos.length
   todos.push(newTodo)
-  newId += 1
+  persistTodos()
   res.status(200).json(todos)
 })
 
@@ -30,6 +30,7 @@ app.put("/editTodo", (req, res) => {
   const index = todos.findIndex((todo) => todo.id == newTodo.id)
   newTodo.order = index //prevent resetting to old order on edit
   todos[index] = newTodo
+  persistTodos()
   res.status(200).json(todos)
 })
 
@@ -37,6 +38,7 @@ app.delete("/delete/:id", (req, res) => {
   const id = req.params.id
   todos = todos.filter((todo) => todo.id != id)
   todos.forEach((todo, index) => todo.order = index)
+  persistTodos()
   res.status(200).json(todos)
 })
 
@@ -46,15 +48,41 @@ app.put("/reorderTodos", (req, res) => {
     order: index
   }))
   todos = reorderedTodos
+  persistTodos()
   res.status(200).json(todos)
 })
+
+//Auxiliary functions
+function persistTodos() {
+  fs.writeFile("data.json", JSON.stringify(todos, null, 2), (err) => {
+    if(err) {
+      console.error(err)
+    }
+  })
+}
+
+function findFreeId() {
+  const sortedTodos = todos.sort((a, b) => a.id - b.id)
+  for(let i = 0; i < sortedTodos.length; i++) {
+    if(sortedTodos[i].id != i+1) {
+      return i+1
+    }
+  }
+  return sortedTodos.length+1
+}
 
 app.listen(8080, "0.0.0.0", () => {
   console.log("Server started")
   fs.readFile("data.json", (err, data) => {
     if (err) {
-      console.error(err)
+      // Create file if not exists
+      fs.writeFile("data.json", "[]", (err) => {
+        if(err) {
+          console.error(err)
+        }
+      })
+    } else {
+      todos = JSON.parse(data)
     }
-    todos = JSON.parse(data)
   })
 })
